@@ -6,8 +6,8 @@ multiple text messages).
 - See https://www.plivo.com/faq/sms/what-is-the-character-limit-for-sms-text-messages/
 - Text messages sent in languages that need UTF8 are limited to 70/67 chars
 - Originally considered using RSA for digital signature. The problem is that 
-RSA signatures are huge! A 2048 bit key will produce 396 char signatures!
-- Using 256 bit ECC key produces digital signature that is 136 chars long 
+RSA signatures are huge! A 2048 bit key will produce 396 char pgp signatures!
+- Using 256 bit ECC key produces pgp signature that is 136 chars long 
 instead that's better but lets see if we can improve it without sacrificing
 security
 
