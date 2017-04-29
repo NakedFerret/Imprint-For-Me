@@ -2,7 +2,8 @@
 be sent in one or two text messages
 - Text messages sent in latin languages have a limit of 160 chars, or 153
 if sending a text that is longer than that (because it will be split up into
-multiple text messages)
+multiple text messages). 
+- See https://www.plivo.com/faq/sms/what-is-the-character-limit-for-sms-text-messages/
 - Text messages sent in languages that need UTF8 are limited to 70/67 chars
 - Originally considered using RSA for digital signature. The problem is that 
 RSA signatures are huge! A 2048 bit key will produce 396 char signatures!
