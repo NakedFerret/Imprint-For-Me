@@ -14,18 +14,14 @@ var msg = crypto.createHash("sha256").update(str).digest();
 
 eccrypto.sign(privateKey, msg).then(function(sig) {
   console.log("Message:", str);
-  console.log("Message length:", str.length);
-  console.log("Hash (buffer):", msg);
-  console.log("Hash (hex string);", msg.toString('hex'));
-  console.log("Hash (base64 string);", msg.toString('base64'));
-  console.log("Hash length:", msg.length);
-  console.log("Hash hex length in chars:", msg.toString('hex').length);
-  console.log("Hash base64 length in chars:", msg.toString('base64').length);
+  console.log("Hash (hex):", msg.toString('hex'));
   console.log("Signature in DER format (hex):", sig.toString('hex'));
-  console.log("Signature in DER format (base64):", sig.toString('base64'));
-  console.log("Signature Length:", sig.length);
-  console.log("Signature hex string chars:", sig.toString('hex').length);
-  console.log("Signature base64 string chars:", sig.toString('base64').length);
+
+  console.log('\n');
+  console.log("Message:", str.length, 'chars |', Buffer.from(str).length, 'bytes');
+  console.log('Hash:', msg.length, 'bytes |', msg.toString('hex').length, 'hex chars |', msg.toString('base64').length, 'base64 chars');
+  console.log('Signature:', sig.length, 'bytes |', sig.toString('hex').length, 'hex chars |', sig.toString('base64').length, 'base64 chars');
+
   eccrypto.verify(publicKey, msg, sig).then(function() {
     console.log("Signature is OK");
   }).catch(function() {

@@ -7,7 +7,19 @@ multiple text messages).
 - Text messages sent in languages that need UTF8 are limited to 70/67 chars
 - Originally considered using RSA for digital signature. The problem is that 
 RSA signatures are huge! A 2048 bit key will produce 396 char pgp signatures!
-- Using 256 bit ECC key produces pgp signatures that are 136 chars long 
+- Using the 256 NIST ECC preset produces pgp signatures that are 136 chars long 
 instead that's better but lets see if we can improve it without sacrificing
 security
+- The node library eccrypto is a nice wrapper for secp256k1. It's used in bitcoin.
+Signatures are 71 bytes long
+- To transmit the signature we should convert it to ascii text to reduce the likelyhood
+of a user's communication channel modifying the byte sequence (Think text messages
+messing with fonts/emojis)
+- We can encode the signature in hex! But that's really inefficient. It would take 
+140 chars. Leaves enough room in a text message but we can do better!
+- With base64 encoding the signature can be represented in 96 chars! Woo so much space!
+- The problem with using the node library is that the private key is only 32 bytes in length
+This makes it really easy to brute force!
+- After spending a couple of hours I couldn't find another js library that is fast
+- Will settle on using gpg npm package and 256 NIST ECC algorithms for signatures
 
