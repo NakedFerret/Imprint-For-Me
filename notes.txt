@@ -21,5 +21,8 @@ messing with fonts/emojis)
 - The problem with using the node library is that the private key is only 32 bytes in length
 This makes it really easy to brute force!
 - After spending a couple of hours I couldn't find another js library that is fast
-- Will settle on using gpg npm package and 256 NIST ECC algorithms for signatures
+- Considering settling on using gpg npm package and 256 NIST ECC algorithms for signatures
+- However...the node gpg package only calls gpg from the command line, and the ECC algorigthms
+are in gpg2. Need to do a bit of wrangling there
+- We could use NaCl. There's a port of it in node
 
