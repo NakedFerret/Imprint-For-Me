@@ -25,4 +25,5 @@ This makes it really easy to brute force!
 - However...the node gpg package only calls gpg from the command line, and the ECC algorigthms
 are in gpg2. Need to do a bit of wrangling there
 - We could use NaCl. There's a port of it in node
-
+- NaCl uses 64 bit private keys to sign using the ed25519 algorithms/curve. The signature
+also turns out to be 64 bytes or 88 base64 chars. Woo!

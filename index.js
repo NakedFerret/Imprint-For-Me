@@ -1,30 +1,11 @@
-var crypto = require("crypto");
-var eccrypto = require("eccrypto");
+var nacl = require("tweetnacl");
 
-// A new random 32-byte private key.
-var privateKey = crypto.randomBytes(32);
+var keyPair = nacl.sign.keyPair();
 
-// Corresponding uncompressed (65-byte) public key
-var publicKey = eccrypto.getPublic(privateKey);
+var message = "I'm calling it now Donald trump starts WWIII";
 
-var str = "message to sign";
+var signature = nacl.sign.detached(Buffer.from(message), keyPair.secretKey);
 
-// Always hash you message to sign!
-var msg = crypto.createHash("sha256").update(str).digest();
+console.log('Message:', message);
+console.log('Signature:', signature.length, 'bytes,', Buffer.from(signature).toString('base64').length, ' base64 chars');
 
-eccrypto.sign(privateKey, msg).then(function(sig) {
-  console.log("Message:", str);
-  console.log("Hash (hex):", msg.toString('hex'));
-  console.log("Signature in DER format (hex):", sig.toString('hex'));
-
-  console.log('\n');
-  console.log("Message:", str.length, 'chars |', Buffer.from(str).length, 'bytes');
-  console.log('Hash:', msg.length, 'bytes |', msg.toString('hex').length, 'hex chars |', msg.toString('base64').length, 'base64 chars');
-  console.log('Signature:', sig.length, 'bytes |', sig.toString('hex').length, 'hex chars |', sig.toString('base64').length, 'base64 chars');
-
-  eccrypto.verify(publicKey, msg, sig).then(function() {
-    console.log("Signature is OK");
-  }).catch(function() {
-    console.log("Signature is BAD");
-  });
-});
