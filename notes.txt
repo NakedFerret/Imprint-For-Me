@@ -24,3 +24,6 @@ are in gpg2. Need to do a bit of wrangling there
 - We could use NaCl. There's a port of it in node
 - NaCl uses 64 bit private keys to sign using the ed25519 algorithms/curve. The signature
 also turns out to be 64 bytes or 88 base64 chars. Woo!
+- Stack: nginx -> node -> postgresql. Nginx will serve static assets. Node will serve html and power API
+- Manage environment variables with .dotenv. Hash assets with express-asset-versions so we can cache 
+old asset versions
