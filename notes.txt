@@ -47,3 +47,6 @@ CREATE TABLE declarations(
 - When configuring knex to connect over localhost, had to update user password and
 provide as environment variable. Instead could use unix and would use OS to auth
 user
+- Might use the $20 https://www.vultr.com/pricing/ VPS. 60 GB space, 4GB memory, 
+3 TB bandwidth, availability to add more space on demand and good performance:
+https://www.webstack.de/blog/e/cloud-hosting-provider-comparison-2017
