@@ -27,3 +27,20 @@ also turns out to be 64 bytes or 88 base64 chars. Woo!
 - Stack: nginx -> node -> postgresql. Nginx will serve static assets. Node will serve html and power API
 - Manage environment variables with .dotenv. Hash assets with express-asset-versions so we can cache 
 old asset versions
+- Table structures:
+CREATE TABLE users(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) UNIQUE NOT NULL,
+  public_key bytea UNIQUE NOT NULL,
+  public_key_id CHAR(8) UNIQUE NOT NULL
+);
+
+CREATE TABLE declarations(
+  id SERIAL PRIMARY KEY,
+  message VARCHAR(140) NOT NULL,
+  signature bytea UNIQUE NOT NULL,
+  user_id INTEGER NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
