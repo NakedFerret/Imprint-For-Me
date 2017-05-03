@@ -44,3 +44,6 @@ CREATE TABLE declarations(
   FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
+- When configuring knex to connect over localhost, had to update user password and
+provide as environment variable. Instead could use unix and would use OS to auth
+user
