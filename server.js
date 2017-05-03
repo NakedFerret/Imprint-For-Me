@@ -1,28 +1,12 @@
-require('dotenv').config()
-var nacl = require("tweetnacl");
+var express = require('express');
+var assets = require('express-asset-versions');
+var app = express();
+var path = require('path');
 
-var keyPair = nacl.sign.keyPair();
+var assetPath = path.join(__dirname, 'public');
+app.use('/public', express.static(assetPath));
+app.use(assets('/public', assetPath));
 
-var message = "I'm calling it now Donald trump starts WWIII";
-
-var signature = nacl.sign.detached(Buffer.from(message), keyPair.secretKey);
-
-console.log('Message:', message);
-console.log('Signature:', signature.length, 'bytes,', Buffer.from(signature).toString('base64').length, ' base64 chars');
-
-var knex = require('knex')({
-  client: process.env.KNEX_DB_CLIENT,
-  connection: {
-    host : process.env.DB_HOST,
-    user : process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database : process.env.DB
-  }
+app.listen(3000, function() {
+  console.log('App listening on 3000');
 });
-
-console.log(knex.select().from('users').toString());
-
-knex.select().from('users').then(function(data) {
-  console.log(data);
-}).then(knex.destroy);
-
