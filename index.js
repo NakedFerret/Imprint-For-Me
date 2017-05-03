@@ -24,5 +24,5 @@ console.log(knex.select().from('users').toString());
 
 knex.select().from('users').then(function(data) {
   console.log(data);
-});
+}).then(knex.destroy);
 
