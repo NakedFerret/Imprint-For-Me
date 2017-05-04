@@ -1,12 +1,14 @@
 var express = require('express');
-var assets = require('express-asset-versions');
-var app = express();
-var path = require('path');
+var exphbs = require('express-handlebars');
 
-var assetPath = path.join(__dirname, 'public');
-app.use('/public', express.static(assetPath));
-app.use(assets('/public', assetPath));
+var app = express();
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
+
+app.get('/', function (req, res) {
+    res.render('home');
+});
 
 app.listen(3000, function() {
-  console.log('App listening on 3000');
+  console.log('Listening on port 3000');
 });
