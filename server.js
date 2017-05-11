@@ -3,6 +3,8 @@ var path = require('path');
 var Handlebars = require('express-handlebars');
 var staticify = require("staticify")(path.join(__dirname, "static"));
 
+require('dotenv').config()
+
 var app = express();
 
 app.use(staticify.middleware);
@@ -22,7 +24,7 @@ app.get('/', function (req, res) {
     res.render('home');
 });
 
-app.listen(3000, function() {
+app.listen(process.env.PORT, process.env.HOST, function() {
   console.log('Listening on port 3000');
 });
 
