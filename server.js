@@ -40,6 +40,45 @@ app.post('/prophecy', function(req, res) {
   var publicKey = req.body.publicKey;
   var signature = req.body.signature;
 
+  if (message === undefined || timestamp === undefined ||
+      publicKey === undefined || signature === undefined) {
+    res.status = 400;
+    res.send ({
+      message: 'Missing parameters'
+    });
+  }
+
+  if (message.length > 130) {
+    res.status = 400;
+    return res.send({
+      message: 'Message must be up to 130 chars'
+    });
+  }
+
+  if (timestamp.length != 10) {
+    res.status = 400;
+    return res.send({
+      message: 'Timestamp must be 10 char numeric string'
+    });
+  }
+
+  publicKey = Buffer.from(publicKey, 'base64');
+  signature = Buffer.from(signature, 'base64');
+
+  if (publicKey.length !== 32) {
+    res.status = 400;
+    return res.send({
+      message: 'Public key must be 32 bytes long'
+    });
+  }
+
+  if (signature.length !== 64) {
+    res.status = 400;
+    return res.send({
+      message: 'Signature must be 64 bytes long'
+    }); 
+  }
+
   var user = findUserByPubKey.get(Buffer.from(publicKey, 'base64'));
 
   // TODO: insert user if not found
