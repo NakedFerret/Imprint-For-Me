@@ -41,7 +41,27 @@ app.post('/prophecy', function(req, res) {
   var signature = req.body.signature;
 
   var user = findUserByPubKey.get(Buffer.from(publicKey, 'base64'));
-  console.log(user); 
+
+  // TODO: insert user if not found
+
+  var verified = nacl.sign.detached.verify(
+    Buffer.from(message + timestamp), 
+    Buffer.from(signature, 'base64'), 
+    user.publicKey
+  );
+
+  if (!verified) {
+    res.status = 406;
+    return res.send({
+      message: 'Signature is invalid'
+    });
+  }
+    
+  var prophecy = findProphecyBySignature.get(Buffer.from(signature, 'base64'));
+
+  // TODO: create new prophecy if not found
+
+  // TODO: create new prophecy if message or timestamp don't match
 
   res.send('OK');
 });
