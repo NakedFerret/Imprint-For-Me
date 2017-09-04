@@ -4,6 +4,8 @@ var Handlebars = require('express-handlebars');
 var staticify = require("staticify")(path.join(__dirname, "static"));
 var bodyParser = require('body-parser');
 var Database = require('better-sqlite3');
+var nacl = require('tweetnacl');
+
 var db = new Database('test.db');
 
 var app = express();
@@ -26,10 +28,10 @@ app.get('/', function (req, res) {
     res.render('home');
 });
 
-var findUserByPubKey = db.prepare('SELECT * FROM users WHERE public_key = ?');
-var insertUser = db.prepare('INSERT INTO users (name, public_key) VALUES (:name, :publicKey)');
+var findUserByPubKey = db.prepare('SELECT * FROM users WHERE publicKey = ?');
+var insertUser = db.prepare('INSERT INTO users (name, publicKey) VALUES (:name, :publicKey)');
 var findProphecyBySignature = db.prepare('SELECT * FROM prophecies WHERE signature = ?');
-var insertProphecy = db.prepare('INSERT INTO prophecies (message, user_id, signature) VALUES (:message, :userId, :signature)');
+var insertProphecy = db.prepare('INSERT INTO prophecies (message, userId, signature) VALUES (:message, :userId, :signature)');
 
 app.post('/prophecy', function(req, res) {
   // TODO: throw error if any inputs are missing

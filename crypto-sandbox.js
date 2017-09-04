@@ -17,5 +17,5 @@ var Database = require('better-sqlite3');
 var db = new Database('test.db');
 
  
-var result = db.prepare('INSERT INTO users (name, public_key) VALUES (?,?)').run('gonzo', keyPair.publicKey);
+var result = db.prepare('INSERT INTO users (name, publicKey) VALUES (?,?)').run('gonzo', keyPair.publicKey);
 console.log(result);
