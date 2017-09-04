@@ -2,10 +2,12 @@ var express = require('express');
 var path = require('path');
 var Handlebars = require('express-handlebars');
 var staticify = require("staticify")(path.join(__dirname, "static"));
+var bodyParser = require('body-parser');
 
 var app = express();
 
 app.use(staticify.middleware);
+app.use(bodyParser.json());
 
 var hbs = Handlebars.create({
   defaultLayout: 'main',
