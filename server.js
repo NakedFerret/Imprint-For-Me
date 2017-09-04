@@ -31,7 +31,7 @@ app.get('/', function (req, res) {
 var findUserByPubKey = db.prepare('SELECT * FROM users WHERE publicKey = ?');
 var insertUser = db.prepare('INSERT INTO users (name, publicKey) VALUES (:name, :publicKey)');
 var findProphecyBySignature = db.prepare('SELECT * FROM prophecies WHERE signature = ?');
-var insertProphecy = db.prepare('INSERT INTO prophecies (message, userId, signature) VALUES (:message, :userId, :signature)');
+var insertProphecy = db.prepare('INSERT INTO prophecies (message, timestamp, userId, signature) VALUES (:message, :timestamp, :userId, :signature)');
 
 app.post('/prophecy', function(req, res) {
   // TODO: throw error if any inputs are missing
@@ -79,13 +79,13 @@ app.post('/prophecy', function(req, res) {
     }); 
   }
 
-  var user = findUserByPubKey.get(Buffer.from(publicKey, 'base64'));
+  var user = findUserByPubKey.get(publicKey);
 
   // TODO: insert user if not found
 
   var verified = nacl.sign.detached.verify(
     Buffer.from(message + timestamp), 
-    Buffer.from(signature, 'base64'), 
+    signature, 
     user.publicKey
   );
 
@@ -96,11 +96,17 @@ app.post('/prophecy', function(req, res) {
     });
   }
     
-  var prophecy = findProphecyBySignature.get(Buffer.from(signature, 'base64'));
+  var prophecy = findProphecyBySignature.get(signature);
 
-  // TODO: create new prophecy if not found
-
-  // TODO: create new prophecy if message or timestamp don't match
+  if (prophecy === undefined || 
+      prophecy.message !== message || prophecy.timestamp !== timestamp) {
+    insertProphecy.run({
+      signature: signature,
+      message: message,
+      timestamp: timestamp,
+      userId: user.id
+    });
+  }
 
   res.send('OK');
 });
