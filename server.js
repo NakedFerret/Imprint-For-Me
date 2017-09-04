@@ -33,9 +33,15 @@ var insertProphecy = db.prepare('INSERT INTO prophecies (message, user_id, signa
 
 app.post('/prophecy', function(req, res) {
   // TODO: throw error if any inputs are missing
+  var message = req.body.message;
+  var timestamp = req.body.timestamp;
+  var publicKey = req.body.publicKey;
+  var signature = req.body.signature;
 
-  
+  var user = findUserByPubKey.get(Buffer.from(publicKey, 'base64'));
+  console.log(user); 
 
+  res.send('OK');
 });
 
 app.listen(3000, '127.0.0.1', function() {
