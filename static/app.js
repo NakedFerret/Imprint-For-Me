@@ -36,7 +36,7 @@ function onCreateClick() {
     return;
   }
 
-  var timestamp = Math.floor(Date.now() / 1000);
+  var timestamp = Math.floor(Date.now() / 1000) + "";
   var storedKey = localStorage.getItem('secretKey');
   var keyPair = storedKey !== null ? 
     nacl.sign.keyPair.fromSecretKey(decodeBase64(storedKey)) :
@@ -47,12 +47,23 @@ function onCreateClick() {
     keyPair.secretKey
   );
 
-  console.log({
-    keyPair: keyPair,
+  var payload = {
     message: message,
     timestamp: timestamp,
-    pubKey: encodeBase64(keyPair.publicKey),
+    publicKey: encodeBase64(keyPair.publicKey),
     signature: encodeBase64(signature)
+  };
+
+  fetch('/prophecy', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then( function(response) {
+    return response.json();
+  }).then( function(data) {
+    console.log(data);
+  }).catch( function (error) {
+    console.error(error)
   });
 
   localStorage.setItem('secretKey', encodeBase64(keyPair.secretKey));
