@@ -24,7 +24,6 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 app.get('/', function (req, res) {
-    console.log(staticify.getVersionedPath('/styles.css'));
     res.render('home');
 });
 
