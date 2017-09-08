@@ -37,6 +37,16 @@ var insertUser = db.prepare('INSERT INTO users (name, publicKey) VALUES (:name, 
 var findProphecyBySignature = db.prepare('SELECT * FROM prophecies WHERE signature = ?');
 var insertProphecy = db.prepare('INSERT INTO prophecies (message, timestamp, userId, signature) VALUES (:message, :timestamp, :userId, :signature)');
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function padDigits(number, digits) {
+  return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
+}
+
 app.post('/prophecy', function(req, res) {
   // TODO: throw error if any inputs are missing
   var message = req.body.message;
@@ -90,14 +100,10 @@ app.post('/prophecy', function(req, res) {
     }); 
   }
 
-  var user = findUserByPubKey.get(publicKey);
-
-  // TODO: insert user if not found
-
   var verified = nacl.sign.detached.verify(
     Buffer.from(message + timestamp), 
     signature, 
-    user.publicKey
+    publicKey
   );
 
   if (!verified) {
@@ -105,6 +111,23 @@ app.post('/prophecy', function(req, res) {
     return res.send({
       message: 'Signature is invalid'
     });
+  }
+
+  var user = findUserByPubKey.get(publicKey);
+  var userId;
+
+  if (user === undefined) {
+    var animalPart = animals[Math.floor(Math.random() * animals.length)];
+    var adjectivePart = adjectives[Math.floor(Math.random() * adjectives.length)];
+    var number = padDigits(getRandomInt(0,1000), 3);
+
+    var insertResult = insertUser.run({ 
+      name: adjectivePart + animalPart + number, 
+      publicKey: publicKey
+    });
+    userId = insertResult.lastInsertROWID;
+  } else {
+    userId = user.id
   }
     
   var prophecy = findProphecyBySignature.get(signature);
@@ -115,7 +138,7 @@ app.post('/prophecy', function(req, res) {
       signature: signature,
       message: message,
       timestamp: timestamp,
-      userId: user.id
+      userId: userId
     });
   }
 

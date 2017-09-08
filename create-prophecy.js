@@ -6,9 +6,6 @@ var keyPair = nacl.sign.keyPair();
 
 var randomNumber = Math.floor(Math.random() * 10000);
 
-db.prepare('INSERT INTO users (name, publicKey) VALUES (?,?)').run(
-'user' + randomNumber, Buffer.from(keyPair.publicKey));
-
 var timestamp = Math.floor(Date.now() / 1000);
 var message = process.argv[2];
 
