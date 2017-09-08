@@ -48,6 +48,13 @@ app.post('/prophecy', function(req, res) {
     });
   }
 
+  if (message.trim().length === 0) {
+    res.status = 400;
+    return res.send({
+      message: 'Message must be more than 0 chars'
+    });
+  }
+
   if (message.length > 130) {
     res.status = 400;
     return res.send({
