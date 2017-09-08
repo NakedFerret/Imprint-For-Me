@@ -31,6 +31,11 @@ function onCreateClick() {
   var messageInput = document.querySelector('#messageInput');
 
   var message = messageInput.value;
+  if (message.trim().length === 0) {
+    // TODO: show error message
+    return;
+  }
+
   var timestamp = Math.floor(Date.now() / 1000);
   var keyPair = nacl.sign.keyPair();
   var signature = nacl.sign.detached(
