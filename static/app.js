@@ -37,16 +37,23 @@ function onCreateClick() {
   }
 
   var timestamp = Math.floor(Date.now() / 1000);
-  var keyPair = nacl.sign.keyPair();
+  var storedKey = localStorage.getItem('secretKey');
+  var keyPair = storedKey !== null ? 
+    nacl.sign.keyPair.fromSecretKey(decodeBase64(storedKey)) :
+    nacl.sign.keyPair();
+
   var signature = nacl.sign.detached(
     decodeUTF8(message+timestamp), 
     keyPair.secretKey
   );
 
   console.log({
+    keyPair: keyPair,
     message: message,
     timestamp: timestamp,
     pubKey: encodeBase64(keyPair.publicKey),
     signature: encodeBase64(signature)
   });
+
+  localStorage.setItem('secretKey', encodeBase64(keyPair.secretKey));
 }
