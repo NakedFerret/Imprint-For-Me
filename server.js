@@ -97,7 +97,7 @@ app.post('/prophecy', function(req, res) {
   );
 
   if (!verified) {
-    res.status = 406;
+    res.status = 400;
     return res.send({
       message: 'Signature is invalid'
     });
