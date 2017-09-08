@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS users ( 
+  id INTEGER PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL,
+  publicKey BLOB UNIQUE NOT NULL
+);
+CREATE TABLE IF NOT EXISTS prophecies (
+  id INTEGER PRIMARY KEY,
+  message TEXT NOT NULL,
+  timestamp TEXT NOT NULL,
+  userId INTEGER NOT NULL,
+  signature BLOB NOT NULL,
+  FOREIGN KEY(userId) REFERENCES users(id)
+);
