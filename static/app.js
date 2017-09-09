@@ -1,4 +1,14 @@
-console.log("Hey there");
+window.onload = function() {
+ var username = localStorage.getItem('username');
+
+ if (username === null) {
+   return;
+ }
+
+ var usernameDisplay = document.querySelector('#username');
+ usernameDisplay.innerText = 'Hello, ' + username + '!'; 
+ usernameDisplay.className = "";
+}
 
 function decodeUTF8(s) {
   if (typeof s !== 'string') throw new TypeError('expected string');
@@ -61,7 +71,7 @@ function onCreateClick() {
   }).then( function(response) {
     return response.json();
   }).then( function(data) {
-    console.log(data);
+    localStorage.setItem('username', data.user.name);
   }).catch( function (error) {
     console.error(error)
   });
