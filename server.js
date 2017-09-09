@@ -33,6 +33,7 @@ const adjectives = ["shared","chinless","stormbound","differentiable","dyadic","
 
 
 var findUserByPubKey = db.prepare('SELECT * FROM users WHERE publicKey = ?');
+var findUserById = db.prepare('SELECT * FROM users WHERE id = ?');
 var insertUser = db.prepare('INSERT INTO users (name, publicKey) VALUES (:name, :publicKey)');
 var findProphecyBySignature = db.prepare('SELECT * FROM prophecies WHERE signature = ?');
 var insertProphecy = db.prepare('INSERT INTO prophecies (message, timestamp, userId, signature) VALUES (:message, :timestamp, :userId, :signature)');
@@ -51,11 +52,11 @@ app.post('/prophecy', function(req, res) {
   // TODO: throw error if any inputs are missing
   var message = req.body.message;
   var timestamp = req.body.timestamp;
-  var publicKey = req.body.publicKey;
-  var signature = req.body.signature;
+  var publicKeyString = req.body.publicKey;
+  var signatureString = req.body.signature;
 
   if (message === undefined || timestamp === undefined ||
-      publicKey === undefined || signature === undefined) {
+      publicKeyString === undefined || signatureString === undefined) {
     res.status = 400;
     res.send ({
       message: 'Missing parameters'
@@ -83,8 +84,8 @@ app.post('/prophecy', function(req, res) {
     });
   }
 
-  publicKey = Buffer.from(publicKey, 'base64');
-  signature = Buffer.from(signature, 'base64');
+  var publicKey = Buffer.from(publicKeyString, 'base64');
+  var signature = Buffer.from(signatureString, 'base64');
 
   if (publicKey.length !== 32) {
     res.status = 400;
@@ -114,7 +115,6 @@ app.post('/prophecy', function(req, res) {
   }
 
   var user = findUserByPubKey.get(publicKey);
-  var userId;
 
   if (user === undefined) {
     var animalPart = animals[Math.floor(Math.random() * animals.length)];
@@ -125,24 +125,34 @@ app.post('/prophecy', function(req, res) {
       name: adjectivePart + animalPart + number, 
       publicKey: publicKey
     });
-    userId = insertResult.lastInsertROWID;
-  } else {
-    userId = user.id
+    user = findUserById.get(insertResult.lastInsertROWID);
   }
     
   var prophecy = findProphecyBySignature.get(signature);
 
-  if (prophecy === undefined || 
-      prophecy.message !== message || prophecy.timestamp !== timestamp) {
+  if (
+    prophecy === undefined || 
+    prophecy.message !== message || prophecy.timestamp !== timestamp
+  ) {
     insertProphecy.run({
       signature: signature,
       message: message,
       timestamp: timestamp,
-      userId: userId
+      userId: user.id
     });
   }
 
-  res.send('OK');
+  res.send({
+   prophecy: {
+     message: message,
+     timestamp: timestamp,
+     signature: signatureString,
+   },
+   user: {
+     name: user.name,
+     publicKey: publicKeyString,
+   }
+  });
 });
 
 app.listen(3000, function() {
