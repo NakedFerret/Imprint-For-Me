@@ -39,6 +39,12 @@ function decodeBase64(s) {
 function onCreateClick() {
   console.log('Create message clicked');
   var messageInput = document.querySelector('#messageInput');
+  var ouputBox1 = document.querySelector('#outputBox1');
+  var ouputBox2 = document.querySelector('#outputBox1');
+  var usernameDisplay = document.querySelector('#username');
+
+  outputBox1.className = "hidden";
+  outputBox2.className = "hidden";
 
   var message = messageInput.value;
   if (message.trim().length === 0) {
@@ -72,9 +78,19 @@ function onCreateClick() {
     return response.json();
   }).then( function(data) {
     localStorage.setItem('username', data.user.name);
+    usernameDisplay.className = "";
+    usernameDisplay.innerText = 'Hello, ' + data.user.name + '!';
+
+    outputBox1.className = "";
+    outputBox1.value = data.prophecy.message + '\n' + data.prophecy.timestamp;
+    outputBox2.className = "";
+    outputBox2.value = data.user.publicKey + '\n' + data.prophecy.signature;
+    
   }).catch( function (error) {
     console.error(error)
   });
 
   localStorage.setItem('secretKey', encodeBase64(keyPair.secretKey));
+
+  
 }
