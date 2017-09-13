@@ -39,12 +39,14 @@ function decodeBase64(s) {
 function onCreateClick() {
   console.log('Create message clicked');
   var messageInput = document.querySelector('#messageInput');
-  var ouputBox1 = document.querySelector('#outputBox1');
-  var ouputBox2 = document.querySelector('#outputBox1');
+  var outputBox1 = document.querySelector('#outputBox1');
+  var outputBox2 = document.querySelector('#outputBox1');
+  var copyButton = document.querySelector('copyProof');
   var usernameDisplay = document.querySelector('#username');
 
   outputBox1.className = "hidden";
   outputBox2.className = "hidden";
+  copyButton.className = "hidden";
 
   var message = messageInput.value;
   if (message.trim().length === 0) {
@@ -85,6 +87,8 @@ function onCreateClick() {
     outputBox1.value = data.prophecy.message + '\n' + data.prophecy.timestamp;
     outputBox2.className = "";
     outputBox2.value = data.user.publicKey + '\n' + data.prophecy.signature;
+
+    copyButton.className = "";
     
   }).catch( function (error) {
     console.error(error)
@@ -93,4 +97,24 @@ function onCreateClick() {
   localStorage.setItem('secretKey', encodeBase64(keyPair.secretKey));
 
   
+}
+
+function onCopyProof() {
+  var copyBuffer = document.createElement('textarea');
+  var outputBox1 = document.querySelector('#outputBox1');
+  var outputBox2 = document.querySelector('#outputBox1');
+
+  document.body.appendChild(copyBuffer);
+  copyBuffer.value = outputBox1.value + '\n' + outputBox2.value;
+  copyBuffer.select();
+
+  try {
+    var successful = document.execCommand('copy');
+    var msg = successful ? 'successful' : 'unsuccessful';
+    console.log('Copying text command was ' + msg);
+  } catch (err) {
+    console.log('Oops, unable to copy');
+  }
+
+  document.body.removeChild(copyBuffer);
 }
