@@ -40,8 +40,8 @@ function onCreateClick() {
   console.log('Create message clicked');
   var messageInput = document.querySelector('#messageInput');
   var outputBox1 = document.querySelector('#outputBox1');
-  var outputBox2 = document.querySelector('#outputBox1');
-  var copyButton = document.querySelector('copyProof');
+  var outputBox2 = document.querySelector('#outputBox2');
+  var copyButton = document.querySelector('#copyProof');
   var usernameDisplay = document.querySelector('#username');
 
   outputBox1.className = "hidden";
@@ -102,7 +102,7 @@ function onCreateClick() {
 function onCopyProof() {
   var copyBuffer = document.createElement('textarea');
   var outputBox1 = document.querySelector('#outputBox1');
-  var outputBox2 = document.querySelector('#outputBox1');
+  var outputBox2 = document.querySelector('#outputBox2');
 
   document.body.appendChild(copyBuffer);
   copyBuffer.value = outputBox1.value + '\n' + outputBox2.value;
