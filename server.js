@@ -28,9 +28,6 @@ app.get('/', function (req, res) {
     res.render('home');
 });
 
-
-
-
 var findUserByPubKey = db.prepare('SELECT * FROM users WHERE publicKey = ?');
 var findUserById = db.prepare('SELECT * FROM users WHERE id = ?');
 var insertUser = db.prepare('INSERT INTO users (name, publicKey) VALUES (:name, :publicKey)');
@@ -48,7 +45,6 @@ function padDigits(number, digits) {
 }
 
 app.post('/prophecy', function(req, res) {
-  // TODO: throw error if any inputs are missing
   var message = req.body.message;
   var timestamp = req.body.timestamp;
   var publicKeyString = req.body.publicKey;

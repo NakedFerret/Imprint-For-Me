@@ -37,7 +37,6 @@ function decodeBase64(s) {
 };
 
 function onCreateClick() {
-  console.log('Create message clicked');
   var messageInput = document.querySelector('#messageInput');
   var outputBox = document.querySelector('#outputBox');
   var copyButton = document.querySelector('#copyProof');
@@ -107,7 +106,6 @@ function onCopyProof() {
   try {
     var successful = document.execCommand('copy');
     var msg = successful ? 'successful' : 'unsuccessful';
-    console.log('Copying text command was ' + msg);
   } catch (err) {
     console.log('Oops, unable to copy');
   }
