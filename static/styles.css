@@ -21,7 +21,7 @@ body {
   text-align: center;
 }
 
-#messageInput, #outputBox1:not(.hidden), #outputBox2:not(.hidden) {
+#messageInput, #outputBox:not(.hidden) {
   max-width: 90%;
   width: 55em;
   display: block;
@@ -32,14 +32,18 @@ body {
   height: 3rem;
 }
 
+#outputBox:not(.hidden) {
+  height: 6rem;
+}
+
 #username {
   position: absolute;
   padding: 0 10px;
 }
 
 @media (max-width: 55em) {
-  #messageInput, #outputBox1:not(.hidden), #outputBox2:not(.hidden) {
-    height: 4rem;
+  #messageInput, #outputBox:not(.hidden) {
+    height: 8rem;
   }
 
 }
@@ -55,7 +59,7 @@ button {
  margin: 1em auto;
 }
 
-#outputBox1, #outputBox2 {
+#outputBox {
   resize: none;
 }
 

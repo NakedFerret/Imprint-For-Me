@@ -39,13 +39,11 @@ function decodeBase64(s) {
 function onCreateClick() {
   console.log('Create message clicked');
   var messageInput = document.querySelector('#messageInput');
-  var outputBox1 = document.querySelector('#outputBox1');
-  var outputBox2 = document.querySelector('#outputBox2');
+  var outputBox = document.querySelector('#outputBox');
   var copyButton = document.querySelector('#copyProof');
   var usernameDisplay = document.querySelector('#username');
 
-  outputBox1.className = "hidden";
-  outputBox2.className = "hidden";
+  outputBox.className = "hidden";
   copyButton.className = "hidden";
 
   var message = messageInput.value;
@@ -83,10 +81,9 @@ function onCreateClick() {
     usernameDisplay.className = "";
     usernameDisplay.innerText = 'Hello, ' + data.user.name + '!';
 
-    outputBox1.className = "";
-    outputBox1.value = data.prophecy.message + '\n' + data.prophecy.timestamp;
-    outputBox2.className = "";
-    outputBox2.value = data.user.publicKey + '\n' + data.prophecy.signature;
+    outputBox.className = "";
+    outputBox.value = data.prophecy.message + '\n' + data.prophecy.timestamp +
+      '\n' + data.user.publicKey + '\n' + data.prophecy.signature;
 
     copyButton.className = "";
     
@@ -101,11 +98,10 @@ function onCreateClick() {
 
 function onCopyProof() {
   var copyBuffer = document.createElement('textarea');
-  var outputBox1 = document.querySelector('#outputBox1');
-  var outputBox2 = document.querySelector('#outputBox2');
+  var outputBox = document.querySelector('#outputBox');
 
   document.body.appendChild(copyBuffer);
-  copyBuffer.value = outputBox1.value + '\n' + outputBox2.value;
+  copyBuffer.value = outputBox.value;
   copyBuffer.select();
 
   try {
