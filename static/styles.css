@@ -32,21 +32,27 @@ body {
   height: 3rem;
 }
 
+#username {
+  position: absolute;
+  padding: 0 10px;
+}
+
 @media (max-width: 55em) {
   #messageInput, #outputBox1:not(.hidden), #outputBox2:not(.hidden) {
     height: 4rem;
+  }
+
+}
+
+@media (max-width: 45em) {
+  #username {
+    position: initial;
   }
 }
 
 button {
  display: block;
  margin: 1em auto;
-}
-
-#username {
-  position: absolute;
-  top: 0;
-  right: 1em;
 }
 
 #outputBox1, #outputBox2 {
