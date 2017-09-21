@@ -5,7 +5,7 @@ var staticify = require("staticify")(path.join(__dirname, "static"));
 var bodyParser = require('body-parser');
 var Database = require('better-sqlite3');
 var nacl = require('tweetnacl');
-var constants = require('./constants');
+var constants = require('./src/constants');
 
 var db = new Database('test.db');
 
