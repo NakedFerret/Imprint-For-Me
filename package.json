@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ajv": "^5.2.2",
     "better-sqlite3": "^4.0.2",
     "body-parser": "^1.17.2",
     "express": "^4.15.2",

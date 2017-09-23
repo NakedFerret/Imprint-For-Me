@@ -1,0 +1,10 @@
+module.exports = {
+  type: "object",
+  properties: {
+    message : { type: "string", minLength: 1, maxLength: 130 },
+    timestamp: { type: "string", minLength: 10, maxLength: 10 },
+    signature: { type: "string", minLength: 88, maxLength: 88 },
+    publicKey: { type: "string", minLength: 44, minLength: 44 }, 
+  },
+  required: ['message', 'timestamp', 'signature', 'publicKey']
+}

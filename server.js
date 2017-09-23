@@ -6,6 +6,9 @@ var bodyParser = require('body-parser');
 var Database = require('better-sqlite3');
 var nacl = require('tweetnacl');
 var constants = require('./src/constants');
+var ajv = require('ajv')({ allErrors: true});
+
+var prophecySchema = require('./src/schema/prophecy');
 
 var db = new Database('test.db');
 
@@ -45,56 +48,23 @@ function padDigits(number, digits) {
 }
 
 app.post('/prophecy', function(req, res) {
-  var message = req.body.message;
-  var timestamp = req.body.timestamp;
-  var publicKeyString = req.body.publicKey;
-  var signatureString = req.body.signature;
+  const prophecyValidate = ajv.compile(prophecySchema);
+  const valid = prophecyValidate(req.body);
 
-  if (message === undefined || timestamp === undefined ||
-      publicKeyString === undefined || signatureString === undefined) {
+  if (!valid) {
     res.status = 400;
-    return res.send ({
-      message: 'Missing parameters'
-    });
+    return res.send({ message: ajv.errorsText(prophecyValidate.errors) }); 
   }
 
-  if (message.trim().length === 0) {
-    res.status = 400;
-    return res.send({
-      message: 'Message must be more than 0 chars'
-    });
-  }
-
-  if (message.length > 130) {
-    res.status = 400;
-    return res.send({
-      message: 'Message must be up to 130 chars'
-    });
-  }
-
-  if (timestamp.length != 10) {
-    res.status = 400;
-    return res.send({
-      message: 'Timestamp must be 10 char numeric string'
-    });
-  }
+  const { 
+    message,
+    timestamp,
+    publicKey: publicKeyString,
+    signature: signatureString
+  } = req.body;
 
   var publicKey = Buffer.from(publicKeyString, 'base64');
   var signature = Buffer.from(signatureString, 'base64');
-
-  if (publicKey.length !== 32) {
-    res.status = 400;
-    return res.send({
-      message: 'Public key must be 32 bytes long'
-    });
-  }
-
-  if (signature.length !== 64) {
-    res.status = 400;
-    return res.send({
-      message: 'Signature must be 64 bytes long'
-    }); 
-  }
 
   var verified = nacl.sign.detached.verify(
     Buffer.from(message + timestamp), 
