@@ -43,6 +43,7 @@ var insertUser = db.prepare('INSERT INTO users (name, publicKey) VALUES (:name, 
 var findProphecyBySignature = db.prepare('SELECT * FROM prophecies WHERE signature = ?');
 var insertProphecy = db.prepare('INSERT INTO prophecies (message, timestamp, userId, signature) VALUES (:message, :timestamp, :userId, :signature)');
 
+
 app.post('/prophecy', function(req, res) {
   const prophecyValidate = ajv.compile(prophecySchema);
   const valid = prophecyValidate(req.body);
@@ -114,6 +115,59 @@ app.post('/prophecy', function(req, res) {
      publicKey: publicKeyString,
    }
   });
+});
+
+app.post('/verify', function(req, res) {
+  const prophecyValidate = ajv.compile(prophecySchema);
+  const valid = prophecyValidate(req.body);
+
+  if (!valid) {
+    res.status = 400;
+    return res.send({ message: ajv.errorsText(prophecyValidate.errors) }); 
+  }
+
+  const { 
+    message,
+    timestamp,
+    publicKey: publicKeyString,
+    signature: signatureString
+  } = req.body;
+
+  var publicKey = Buffer.from(publicKeyString, 'base64');
+  var signature = Buffer.from(signatureString, 'base64');
+
+  var verified = nacl.sign.detached.verify(
+    Buffer.from(message + timestamp), 
+    signature, 
+    publicKey
+  );
+
+  if (!verified) {
+    res.status = 400;
+    return res.send({
+      message: 'Signature is invalid'
+    });
+  } 
+
+
+  const response = {
+    prophecy: {
+      message: message,
+      timestamp: timestamp,
+      signature: signatureString,
+    }
+  };
+
+  const user = findUserByPubKey.get(publicKey);
+
+  if (user !== undefined) {
+    response.user = {
+      name: user.name,
+      publicKey: publicKeyString,
+    };
+  }
+  
+  return res.send(response);
 });
 
 app.listen(3000, function() {
