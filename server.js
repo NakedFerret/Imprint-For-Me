@@ -8,6 +8,7 @@ var nacl = require('tweetnacl');
 var constants = require('./src/constants');
 var ajv = require('ajv')({ allErrors: true});
 const getRandomInt = require('./src/utils/getRandomInt');
+const padDigits = require('./src/utils/padDigits');
 
 var prophecySchema = require('./src/schema/prophecy');
 
@@ -37,10 +38,6 @@ var findUserById = db.prepare('SELECT * FROM users WHERE id = ?');
 var insertUser = db.prepare('INSERT INTO users (name, publicKey) VALUES (:name, :publicKey)');
 var findProphecyBySignature = db.prepare('SELECT * FROM prophecies WHERE signature = ?');
 var insertProphecy = db.prepare('INSERT INTO prophecies (message, timestamp, userId, signature) VALUES (:message, :timestamp, :userId, :signature)');
-
-function padDigits(number, digits) {
-  return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
-}
 
 app.post('/prophecy', function(req, res) {
   const prophecyValidate = ajv.compile(prophecySchema);
