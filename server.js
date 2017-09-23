@@ -12,6 +12,10 @@ const padDigits = require('./src/utils/padDigits');
 
 var prophecySchema = require('./src/schema/prophecy');
 
+ajv.addKeyword('length', { type: 'string' , compile: function(param) {
+  return function(data) { return data.trim().length === param; }
+} });
+
 var db = new Database('test.db');
 
 var app = express();
