@@ -7,6 +7,7 @@ var Database = require('better-sqlite3');
 var nacl = require('tweetnacl');
 var constants = require('./src/constants');
 var ajv = require('ajv')({ allErrors: true});
+const getRandomInt = require('./src/utils/getRandomInt');
 
 var prophecySchema = require('./src/schema/prophecy');
 
@@ -36,12 +37,6 @@ var findUserById = db.prepare('SELECT * FROM users WHERE id = ?');
 var insertUser = db.prepare('INSERT INTO users (name, publicKey) VALUES (:name, :publicKey)');
 var findProphecyBySignature = db.prepare('SELECT * FROM prophecies WHERE signature = ?');
 var insertProphecy = db.prepare('INSERT INTO prophecies (message, timestamp, userId, signature) VALUES (:message, :timestamp, :userId, :signature)');
-
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-}
 
 function padDigits(number, digits) {
   return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
