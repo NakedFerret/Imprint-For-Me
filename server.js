@@ -9,8 +9,10 @@ var constants = require('./src/constants');
 var ajv = require('ajv')({ allErrors: true});
 const getRandomInt = require('./src/utils/getRandomInt');
 const padDigits = require('./src/utils/padDigits');
+const explodeVerificationMessage = require('./src/utils/explodeVerificationMessage');
 
 var prophecySchema = require('./src/schema/prophecy');
+var verifySchema = require('./src/schema/verify');
 
 ajv.addKeyword('length', { type: 'string' , compile: function(param) {
   return function(data) { return data.trim().length === param; }
@@ -122,20 +124,30 @@ app.post('/prophecy', function(req, res) {
 });
 
 app.post('/verify', function(req, res) {
-  const prophecyValidate = ajv.compile(prophecySchema);
-  const valid = prophecyValidate(req.body);
+  const verifyValidate = ajv.compile(verifySchema);
+  const valid = verifyValidate(req.body);
 
   if (!valid) {
     res.status = 400;
     return res.send({ message: ajv.errorsText(prophecyValidate.errors) }); 
   }
 
-  const { 
+  const { message: inputMessage } = req.body;
+
+  const {
+    success,
     message,
     timestamp,
     publicKey: publicKeyString,
     signature: signatureString
-  } = req.body;
+  } = explodeVerificationMessage(inputMessage);
+
+  if (!success) {
+    res.status = 400;
+    return res.send({
+      message: 'Failed to parse payload'
+    });
+  } 
 
   var publicKey = Buffer.from(publicKeyString, 'base64');
   var signature = Buffer.from(signatureString, 'base64');

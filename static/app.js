@@ -97,10 +97,10 @@ function onCreateClick() {
 
 function onVerifyClick() {
   var messageInput = document.querySelector('#verificationInput');
-  var outputBox = document.querySelector('#outputBox');
+  var outputMessage = document.querySelector('.message');
   var usernameDisplay = document.querySelector('#username');
 
-  outputBox.className = "hidden";
+  outputMessage.className = "hidden";
 
   var message = messageInput.value;
   if (message.trim().length === 0) {
@@ -110,7 +110,7 @@ function onVerifyClick() {
 
   var payload = { message: message };
 
-  fetch('/prophecy', {
+  fetch('/verify', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
@@ -120,8 +120,6 @@ function onVerifyClick() {
     // TODO detect if 400 ? show invalid : show error;
     console.error(error)
   });
-
-  localStorage.setItem('secretKey', encodeBase64(keyPair.secretKey));
 }
 
 function onCopyProof() {
