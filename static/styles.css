@@ -21,7 +21,7 @@ body {
   text-align: center;
 }
 
-#messageInput, #outputBox:not(.hidden) {
+#messageInput, #verificationInput, #outputBox:not(.hidden) {
   max-width: 90%;
   width: 55em;
   display: block;
@@ -32,7 +32,7 @@ body {
   height: 3rem;
 }
 
-#outputBox:not(.hidden) {
+#outputBox:not(.hidden), #verificationInput {
   height: 6rem;
 }
 
@@ -42,13 +42,13 @@ body {
 }
 
 @media (max-width: 55em) {
-  #outputBox:not(.hidden) {
+  #outputBox:not(.hidden), #verificationInput {
     height: 6rem;
   }
 }
 
 @media (max-width: 45em) {
-  #outputBox:not(.hidden) {
+  #outputBox:not(.hidden), #verificationInput {
     height: 8rem;
   }
   #username {

@@ -95,6 +95,35 @@ function onCreateClick() {
   
 }
 
+function onVerifyClick() {
+  var messageInput = document.querySelector('#verificationInput');
+  var outputBox = document.querySelector('#outputBox');
+  var usernameDisplay = document.querySelector('#username');
+
+  outputBox.className = "hidden";
+
+  var message = messageInput.value;
+  if (message.trim().length === 0) {
+    // TODO: show error message
+    return;
+  }
+
+  var payload = { message: message };
+
+  fetch('/prophecy', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then( function(response) {
+    // TODO show success message
+  }).catch( function (error) {
+    // TODO detect if 400 ? show invalid : show error;
+    console.error(error)
+  });
+
+  localStorage.setItem('secretKey', encodeBase64(keyPair.secretKey));
+}
+
 function onCopyProof() {
   var copyBuffer = document.createElement('textarea');
   var outputBox = document.querySelector('#outputBox');

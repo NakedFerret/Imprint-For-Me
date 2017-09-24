@@ -37,6 +37,10 @@ app.get('/', function (req, res) {
     res.render('home');
 });
 
+app.get('/verify', function(req, res) {
+  res.render('verify');
+});
+
 var findUserByPubKey = db.prepare('SELECT * FROM users WHERE publicKey = ?');
 var findUserById = db.prepare('SELECT * FROM users WHERE id = ?');
 var insertUser = db.prepare('INSERT INTO users (name, publicKey) VALUES (:name, :publicKey)');
