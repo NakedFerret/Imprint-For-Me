@@ -42,13 +42,15 @@ body {
 }
 
 @media (max-width: 55em) {
-  #messageInput, #outputBox:not(.hidden) {
-    height: 8rem;
+  #outputBox:not(.hidden) {
+    height: 6rem;
   }
-
 }
 
 @media (max-width: 45em) {
+  #outputBox:not(.hidden) {
+    height: 8rem;
+  }
   #username {
     position: initial;
   }
