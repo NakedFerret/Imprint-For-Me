@@ -1,12 +1,9 @@
 {
-  "name": "i-told-you-so",
+  "name": "imprint-for-me",
   "version": "0.0.1",
   "description": "Web app to verify things people say",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
+  "author": "Gonzalo Andreani",
   "license": "ISC",
   "dependencies": {
     "ajv": "^5.2.2",
