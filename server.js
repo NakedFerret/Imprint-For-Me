@@ -36,7 +36,11 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 app.get('/', function (req, res) {
-    res.render('home');
+  res.render('home');
+});
+
+app.get('/imprint', function(req, res) {
+  res.render('imprint');
 });
 
 app.get('/verify', function(req, res) {
