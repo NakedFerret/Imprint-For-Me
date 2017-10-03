@@ -100,7 +100,7 @@ function onVerifyClick() {
   var outputMessage = document.querySelector('.message');
   var usernameDisplay = document.querySelector('#username');
 
-  outputMessage.className = "hidden";
+  outputMessage.innerHTML = '';
 
   var message = messageInput.value;
   if (message.trim().length === 0) {
@@ -115,7 +115,14 @@ function onVerifyClick() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   }).then( function(response) {
+    return response.json();
     // TODO show success message
+  }).then( function(data) {
+     outputMessage.innerHTML = tmpl('verificationMessage', {
+       date: Date(data.prophecy.timestamp),
+       username: data.user.name,
+       message: data.prophecy.message
+     });
   }).catch( function (error) {
     // TODO detect if 400 ? show invalid : show error;
     console.error(error)

@@ -4,9 +4,15 @@
       <meta charset="utf-8">
       <title>Example App</title>
       <link rel="stylesheet" type="text/css" href="{{getAsset '/styles.css'}}" />
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-JavaScript-Templates/3.11.0/js/tmpl.min.js"> </script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tweetnacl/1.0.0/nacl-fast.min.js"></script>
       <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.js?features=Promise,fetch,localStorage&unknown=polyfill"></script>
       <script type="text/javascript" src="{{getAsset '/app.js'}}"></script>
+      <script id="verificationMessage" type="text/x-tmpl">
+        <p> On <span class="bold">{%=o.date%}</span><p>
+        <p> <span class="bold">{%=o.username%}</span> wrote: </p>
+        <p> {%=o.message%} </p>
+      </script>
     </head> 
     <body>
       {{{body}}} 
