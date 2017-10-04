@@ -18,6 +18,15 @@ ajv.addKeyword('length', { type: 'string' , compile: function(param) {
   return function(data) { return data.trim().length === param; }
 } });
 
+ajv.addKeyword('youngerThan', { type: 'string' , compile: function(param) {
+  return function(data) {
+    const givenDate = parseInt(data) * 1000;
+    const currentDate = Date.now();
+    return currentDate >= givenDate && 
+      (currentDate - givenDate) <= param; 
+  }
+} });
+
 var db = new Database('test.db');
 
 var app = express();

@@ -2,7 +2,7 @@ module.exports = {
   type: "object",
   properties: {
     message : { type: "string", minLength: 1, maxLength: 130 },
-    timestamp: { type: "string", length: 10 },
+    timestamp: { type: "string", length: 10, youngerThan: 5000 },
     signature: { type: "string", length: 88 },
     publicKey: { type: "string", length: 44 }, 
   },
