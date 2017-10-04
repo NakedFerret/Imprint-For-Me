@@ -41,6 +41,10 @@ body {
   padding: 0 10px;
 }
 
+#introText {
+  padding: 0 10px;
+}
+
 @media (max-width: 55em) {
   #outputBox:not(.hidden), #verificationInput {
     height: 6rem;
