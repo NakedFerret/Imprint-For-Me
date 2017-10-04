@@ -68,8 +68,9 @@ app.post('/prophecy', function(req, res) {
   const valid = prophecyValidate(req.body);
 
   if (!valid) {
-    res.status = 400;
-    return res.send({ message: ajv.errorsText(prophecyValidate.errors) }); 
+    return res.status(400).send({ 
+      message: ajv.errorsText(prophecyValidate.errors) 
+    }); 
   }
 
   const { 
@@ -89,8 +90,7 @@ app.post('/prophecy', function(req, res) {
   );
 
   if (!verified) {
-    res.status = 400;
-    return res.send({
+    return res.status(400).send({
       message: 'Signature is invalid'
     });
   }
@@ -141,8 +141,9 @@ app.post('/verify', function(req, res) {
   const valid = verifyValidate(req.body);
 
   if (!valid) {
-    res.status = 400;
-    return res.send({ message: ajv.errorsText(prophecyValidate.errors) }); 
+    res.status(400).send({ 
+      message: ajv.errorsText(prophecyValidate.errors) 
+    }); 
   }
 
   const { message: inputMessage } = req.body;
@@ -156,8 +157,7 @@ app.post('/verify', function(req, res) {
   } = explodeVerificationMessage(inputMessage);
 
   if (!success) {
-    res.status = 400;
-    return res.send({
+    res.status(400).send({
       message: 'Failed to parse payload'
     });
   } 
@@ -172,8 +172,7 @@ app.post('/verify', function(req, res) {
   );
 
   if (!verified) {
-    res.status = 400;
-    return res.send({
+    res.status(400).send({
       message: 'Signature is invalid'
     });
   } 
