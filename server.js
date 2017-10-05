@@ -83,11 +83,17 @@ app.post('/prophecy', function(req, res) {
   var publicKey = Buffer.from(publicKeyString, 'base64');
   var signature = Buffer.from(signatureString, 'base64');
 
-  var verified = nacl.sign.detached.verify(
-    Buffer.from(message + timestamp), 
-    signature, 
-    publicKey
-  );
+  try {
+    var verified = nacl.sign.detached.verify(
+      Buffer.from(message + timestamp), 
+      signature, 
+      publicKey
+    );
+  } catch (e) {
+    return res.status(400).send({
+      message: 'Signature is invalid'
+    });
+  }
 
   if (!verified) {
     return res.status(400).send({
@@ -165,14 +171,20 @@ app.post('/verify', function(req, res) {
   var publicKey = Buffer.from(publicKeyString, 'base64');
   var signature = Buffer.from(signatureString, 'base64');
 
-  var verified = nacl.sign.detached.verify(
-    Buffer.from(message + timestamp), 
-    signature, 
-    publicKey
-  );
+  try {
+    var verified = nacl.sign.detached.verify(
+      Buffer.from(message + timestamp), 
+      signature, 
+      publicKey
+    );
+  } catch (e) {
+    return res.status(400).send({
+      message: 'Signature is invalid'
+    });
+  }
 
   if (!verified) {
-    res.status(400).send({
+    return res.status(400).send({
       message: 'Signature is invalid'
     });
   } 
