@@ -36,18 +36,30 @@ function decodeBase64(s) {
   return b;
 };
 
+function handleAPIResponse(response) {
+  if (response.status === 400) {
+    var error = new Error();
+    error.apiError = true;
+    error.response = response;
+    throw error;
+  }
+  return response.json();
+};
+
 function onCreateClick() {
   var messageInput = document.querySelector('#messageInput');
   var outputBox = document.querySelector('#outputBox');
+  var outputMessage = document.querySelector('.message');
   var copyButton = document.querySelector('#copyProof');
   var usernameDisplay = document.querySelector('#username');
 
   outputBox.className = "hidden";
+  outputMessage.innerText = "";
   copyButton.className = "hidden";
 
   var message = messageInput.value;
   if (message.trim().length === 0) {
-    // TODO: show error message
+    outputMessage.innerText = "Must have a message"
     return;
   }
 
@@ -73,9 +85,9 @@ function onCreateClick() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
-  }).then( function(response) {
-    return response.json();
-  }).then( function(data) {
+  })
+  .then(handleAPIResponse)
+  .then(function(data) {
     localStorage.setItem('username', data.user.name);
     usernameDisplay.className = "";
     usernameDisplay.innerText = 'Hello, ' + data.user.name + '!';
@@ -87,12 +99,16 @@ function onCreateClick() {
     copyButton.className = "";
     
   }).catch( function (error) {
-    console.error(error)
+    if (error.apiError === true) {
+      error.response.json().then(function(text) {
+        outputMessage.innerText = 'API error: ' + JSON.stringify(text);
+      });
+    } else {
+      outputMessage.innerText = 'Network error :(';
+    }
   });
 
   localStorage.setItem('secretKey', encodeBase64(keyPair.secretKey));
-
-  
 }
 
 function onVerifyClick() {
@@ -104,7 +120,7 @@ function onVerifyClick() {
 
   var message = messageInput.value;
   if (message.trim().length === 0) {
-    // TODO: show error message
+    outputMessage.innerText = "Must have a message"
     return;
   }
 
@@ -114,10 +130,9 @@ function onVerifyClick() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
-  }).then( function(response) {
-    return response.json();
-    // TODO show success message
-  }).then( function(data) {
+  })
+  .then(handleAPIResponse)
+  .then( function(data) {
      outputMessage.innerHTML = tmpl('verificationMessage', {
        date: Date(data.prophecy.timestamp),
        username: data.user.name,
