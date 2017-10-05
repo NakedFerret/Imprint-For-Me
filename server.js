@@ -177,12 +177,18 @@ app.post('/verify', function(req, res) {
     });
   } 
 
+  const storedProphecy = findProphecyBySignature.get(signature);
 
   const response = {
     prophecy: {
       message: message,
       timestamp: timestamp,
       signature: signatureString,
+      found: storedProphecy !== undefined
+    },
+    user: {
+      name: 'Unknown User',
+      found: false
     }
   };
 
@@ -192,6 +198,7 @@ app.post('/verify', function(req, res) {
     response.user = {
       name: user.name,
       publicKey: publicKeyString,
+      found: true
     };
   }
   

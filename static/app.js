@@ -133,14 +133,21 @@ function onVerifyClick() {
   })
   .then(handleAPIResponse)
   .then( function(data) {
+     var dateMessageSuffix = data.prophecy.found ?
+      ' (In the ledger)' : ' (Unverified)';
      outputMessage.innerHTML = tmpl('verificationMessage', {
-       date: Date(data.prophecy.timestamp),
+       date: Date(data.prophecy.timestamp) + dateMessageSuffix,
        username: data.user.name,
        message: data.prophecy.message
      });
   }).catch( function (error) {
-    // TODO detect if 400 ? show invalid : show error;
-    console.error(error)
+    if (error.apiError === true) {
+      error.response.json().then(function(text) {
+        outputMessage.innerText = 'API error: ' + JSON.stringify(text);
+      });
+    } else {
+      outputMessage.innerText = 'Network error :(';
+    }
   });
 }
 
