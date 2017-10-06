@@ -217,7 +217,7 @@ app.post('/verify', function(req, res) {
   return res.send(response);
 });
 
-app.listen(process.env.PORT || 3000, function() {
+app.listen(process.env.PORT || 3000, 'localhost', function() {
   console.log('Listening on port 3000');
 });
 
